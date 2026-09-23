@@ -1,0 +1,1106 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chibi Shark World</title>
+    <style>
+      :root {
+        --bg: #eaf8ff;
+        --panel: #f8fcff;
+        --primary: #1579c9;
+        --primary-dark: #0d69b1;
+        --text: #0d2f4b;
+        --muted: #5d7084;
+      }
+
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0;
+        min-height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(180deg, #cfeeff 0%, #eaf8ff 100%);
+        color: var(--text);
+      }
+      body {
+        display: grid;
+        place-items: center;
+        padding: 18px;
+      }
+      .app {
+        width: min(100%, 560px);
+        min-height: 760px;
+        background: var(--panel);
+        border: 4px solid #fff;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 28px 60px rgba(7, 74, 119, 0.25);
+      }
+      .header {
+        background: linear-gradient(180deg, #1579c9 0%, #0f6eb7 100%);
+        padding: 16px 16px 12px;
+        color: white;
+      }
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo {
+        font-size: 34px;
+      }
+      .brand-name {
+        font-weight: 900;
+        font-size: 1.25rem;
+      }
+      .brand-sub {
+        font-size: 0.62rem;
+        letter-spacing: 0.18em;
+        opacity: 0.8;
+      }
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .chip {
+        border-radius: 999px;
+        border: 2px solid rgba(255,255,255,0.45);
+        background: rgba(255,255,255,0.15);
+        padding: 6px 10px;
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
+      .chip.gold {
+        background: #ffd66a;
+        color: #7a4b00;
+      }
+      .xp-bar {
+        margin-top: 12px;
+      }
+      .xp-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.72rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .bar {
+        height: 12px;
+        background: rgba(5, 54, 83, 0.25);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar > span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #fff4b3 0%, #fff8db 100%);
+      }
+      .content {
+        padding: 16px;
+        min-height: 560px;
+      }
+      .card {
+        border-radius: 22px;
+        background: white;
+        border: 2px solid #d9ebf7;
+        box-shadow: 0 10px 18px rgba(22, 64, 102, 0.05);
+      }
+      .pet-hero {
+        position: relative;
+        padding: 18px 14px 16px;
+        text-align: center;
+        background: linear-gradient(180deg, #ddf4ff 0%, #d7effe 100%);
+      }
+      .pet-circle {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+        border: 4px solid white;
+        font-size: 4rem;
+        box-shadow: 0 12px 24px rgba(15, 95, 145, 0.18);
+      }
+      .pet-circle .outfit-tag {
+        position: absolute;
+        right: -8px;
+        bottom: 6px;
+        background: #fff4d5;
+        border: 2px solid white;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 1.1rem;
+      }
+      .pet-name {
+        margin-top: 12px;
+        font-size: 1.7rem;
+        font-weight: 900;
+        color: #0c5d93;
+      }
+      .pet-state {
+        font-size: 0.72rem;
+        color: #387598;
+        font-weight: 800;
+      }
+      .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .menu-btn {
+        border-radius: 20px;
+        border: 2px solid transparent;
+        padding: 14px 12px;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+      }
+      .menu-btn:hover { transform: translateY(-2px); }
+      .menu-btn .emoji { font-size: 2rem; display: block; }
+      .menu-btn .label { display: block; margin-top: 6px; font-weight: 900; font-size: 0.88rem; }
+      .achievements-link {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        border: 2px solid #f2d89a;
+        border-radius: 18px;
+        background: #fffdf7;
+        padding: 12px 14px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .section-head h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        color: #0c5d93;
+      }
+      .back-btn {
+        border: none;
+        background: #edf2f7;
+        color: #31465d;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .status-box {
+        padding: 12px;
+        border-radius: 20px;
+        border: 2px solid #dfeef9;
+        background: white;
+      }
+      .status-row { margin-bottom: 10px; }
+      .status-row:last-child { margin-bottom: 0; }
+      .status-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.74rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+      .status-track {
+        height: 12px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #edf3f7;
+      }
+      .status-track span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+      }
+      .food-grid, .dress-grid, .mini-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .food-item, .dress-item {
+        border: 2px solid #dfeaf4;
+        border-radius: 18px;
+        background: white;
+        padding: 10px;
+        text-align: left;
+        cursor: pointer;
+      }
+      .food-item .emoji, .dress-item .emoji { display: inline-block; margin-right: 4px; font-size: 1.4rem; }
+      .food-item .name, .dress-item .name { display: block; font-weight: 900; margin-top: 4px; color: #1d3d5e; }
+      .food-item .meta, .dress-item .meta { display: block; font-size: 0.68rem; color: #8b5d00; font-weight: 800; }
+      .care-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .care-btn {
+        border: none;
+        border-radius: 12px;
+        min-height: 42px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .shop-list, .achievement-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .shop-item, .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 18px;
+        background: white;
+        border: 2px solid #dfeaf4;
+        padding: 10px;
+      }
+      .shop-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: #eef8ff;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+      }
+      .shop-item .details { flex: 1; }
+      .shop-item h4, .achievement-item h4 { margin: 0; font-size: 0.8rem; }
+      .shop-item p, .achievement-item p { margin: 4px 0 0; color: var(--muted); font-size: 0.7rem; }
+      .shop-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .small-btn, .primary-btn, .primary-full {
+        border: none;
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .small-btn {
+        background: #e5f7ff;
+        color: #0d609d;
+      }
+      .primary-btn {
+        background: #ef9f00;
+        color: white;
+      }
+      .primary-full {
+        width: 100%;
+        background: var(--primary);
+        color: white;
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-top: 12px;
+      }
+      .mini-btn {
+        width: 100%;
+        border: none;
+        border-radius: 18px;
+        background: linear-gradient(90deg, #4aa3ef 0%, #1d78cb 100%);
+        color: white;
+        text-align: left;
+        padding: 14px 16px;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .mini-btn .emoji { font-size: 1.4rem; margin-right: 6px; }
+      .quiz-card {
+        padding: 14px;
+        border-radius: 22px;
+        border: 2px solid #cfeaf9;
+        background: white;
+      }
+      .quiz-top {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        font-weight: 900;
+        margin-bottom: 12px;
+      }
+      .progress {
+        height: 12px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: #ebf1f6;
+      }
+      .progress span {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, #5bbeff, #1579c9);
+      }
+      .quiz-box {
+        margin-top: 14px;
+        background: #f5fbff;
+        border: 2px solid #d7edf9;
+        border-radius: 20px;
+        padding: 14px;
+      }
+      .quiz-box h3 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+      .answer-list {
+        display: grid;
+        gap: 8px;
+      }
+      .answer-btn {
+        width: 100%;
+        border: 2px solid #dfeaf4;
+        background: #f7fafc;
+        border-radius: 14px;
+        padding: 10px 12px;
+        text-align: left;
+        font-weight: 800;
+        color: #254d6e;
+        cursor: pointer;
+      }
+      .answer-btn.correct { background: #e8fff0; border-color: #78d5a3; color: #156d43; }
+      .answer-btn.wrong { background: #fff0f2; border-color: #f1a0ac; color: #8a3047; }
+      .explanation {
+        margin-top: 12px;
+        background: #fff8df;
+        border-radius: 14px;
+        padding: 10px 12px;
+        font-size: 0.72rem;
+        color: #785605;
+      }
+      .result-box {
+        text-align: center;
+        background: #fffced;
+        border: 2px solid #f0d98d;
+        border-radius: 22px;
+        padding: 20px 16px;
+      }
+      .result-box .trophy { font-size: 3.5rem; }
+      .result-box h3 {
+        margin: 8px 0 0;
+        font-size: 1.8rem;
+        color: #0d5d92;
+      }
+      .result-box p { margin: 8px 0 0; color: var(--muted); font-size: 0.8rem; }
+      .bottom-nav {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        border-top: 2px solid #dfeef7;
+        background: white;
+      }
+      .nav-btn {
+        border: none;
+        background: transparent;
+        padding: 10px 6px 12px;
+        color: #6f7e8f;
+        font-weight: 800;
+        font-size: 0.7rem;
+        cursor: pointer;
+      }
+      .nav-btn.active { color: var(--primary); }
+      .nav-btn span { display: block; font-size: 1.2rem; margin-bottom: 2px; }
+      .starter {
+        display: grid;
+        place-items: center;
+        min-height: 760px;
+        background: linear-gradient(180deg, rgba(10,72,128,0.8), rgba(7,87,154,0.6));
+        padding: 20px;
+      }
+      .starter-inner {
+        width: min(100%, 500px);
+        background: #d7f2ff;
+        border: 6px solid #eaf8ff;
+        border-radius: 36px;
+        padding: 16px;
+        text-align: center;
+        box-shadow: 0 26px 60px rgba(0,0,0,0.2);
+      }
+      .starter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 900;
+        color: #0d5d92;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+      }
+      .starter-body {
+        margin-top: 16px;
+        border-radius: 28px;
+        background: rgba(255,255,255,0.85);
+        border: 3px solid #8bc9ef;
+        padding: 18px 14px 20px;
+      }
+      .starter-pet {
+        width: 140px;
+        height: 140px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(217,245,255,0.9);
+        border: 4px solid white;
+        margin: 0 auto;
+        font-size: 5rem;
+        box-shadow: 0 14px 24px rgba(17, 99, 148, 0.2);
+      }
+      .starter-badge {
+        display: inline-block;
+        background: #eaf7ff;
+        color: #0d6aad;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 0.68rem;
+        font-weight: 900;
+        margin-top: 14px;
+      }
+      .starter h1 {
+        margin: 14px 0 0;
+        font-size: 2.8rem;
+        line-height: 0.9;
+        color: #0e5790;
+      }
+      .starter p {
+        margin: 16px 0 0;
+        color: #3b5974;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .starter-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 18px;
+      }
+      .starter-grid .small {
+        background: #edf8ff;
+        border-radius: 16px;
+        padding: 10px 8px;
+        border: 2px solid white;
+      }
+      .starter-grid .small strong {
+        display: block;
+        font-size: 1.3rem;
+        color: #0d5d92;
+      }
+      .starter-btn {
+        width: 100%;
+        margin-top: 18px;
+        border: none;
+        border-radius: 16px;
+        padding: 14px 18px;
+        background: linear-gradient(180deg, #1a86d7 0%, #0f6ab6 100%);
+        color: white;
+        font-size: 1.05rem;
+        font-weight: 900;
+        cursor: pointer;
+      }
+      @media (max-width: 420px) {
+        .menu-grid, .food-grid, .dress-grid, .care-actions { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const STORAGE_KEY = 'chibi-shark-world-html';
+      const OUTFITS = [
+        { id: 'outfit_1', name: 'ชุดปกติ', icon: '👕', price: 0 },
+        { id: 'outfit_2', name: 'กะลาสีเรือ', icon: '⚓', price: 70 },
+        { id: 'outfit_3', name: 'ผ้าคลุมฮีโร่', icon: '🦸', price: 105 },
+        { id: 'outfit_4', name: 'โจรสลัดแคริบเบียน', icon: '🏴‍☠️', price: 140 },
+        { id: 'outfit_5', name: 'เจ้าชายใต้สมุทร', icon: '👑', price: 175 },
+        { id: 'outfit_6', name: 'นักบินอวกาศน้ำลึก', icon: '🚀', price: 210 },
+        { id: 'outfit_7', name: 'สเวตเตอร์ไหมพรม', icon: '🧶', price: 245 },
+        { id: 'outfit_8', name: 'สูททักซิโดสุดหรู', icon: '🤵', price: 280 },
+        { id: 'outfit_9', name: 'กิโมโนซากุระ', icon: '👘', price: 315 }
+      ];
+
+      const defaultGame = {
+        money: 800,
+        level: 1,
+        xp: 0,
+        hunger: 90,
+        happiness: 90,
+        energy: 90,
+        clean: 90,
+        pet: '🦈',
+        petName: 'บลูชาร์ก',
+        house: 1,
+        outfit: 'outfit_1',
+        unlockedOutfits: ['outfit_1'],
+        achievements: [
+          { id: 'first_feed', title: 'นักให้อาหารมือใหม่', desc: 'ให้อาหารน้องฉลามครั้งแรก', reward: 50, unlocked: false },
+          { id: 'rich_shark', title: 'เศรษฐีใต้ทะเล', desc: 'สะสมเงินครบ 1,000 เหรียญ', reward: 200, unlocked: false },
+          { id: 'fashion_ista', title: 'แฟชั่นนิสต้าระดับเทพ', desc: 'ปลดล็อกชุดแฟชั่นครบ 10 ชุด', reward: 300, unlocked: false },
+          { id: 'level_5', title: 'ฉลามผู้ทรงเกียรติ', desc: 'เลเวลอัปถึง Lv.5', reward: 500, unlocked: false }
+        ],
+        inventory: { energy_drink: 2, healing_potion: 1, cleaning_spray: 2 },
+        luckMultiplier: 1,
+        lastCheckIn: null,
+        dailyStreak: 0
+      };
+
+      const COMPUTER_QUIZ = [
+        { question: 'CPU มีหน้าที่หลักอะไร?', options: ['แสดงภาพ', 'ประมวลผลคำสั่ง', 'เก็บไฟล์ถาวร', 'พิมพ์เอกสาร'], answer: 1, explanation: 'CPU คือหน่วยประมวลผลกลาง ทำหน้าที่คำนวณและดำเนินคำสั่งของโปรแกรม' },
+        { question: 'RAM ใช้ทำอะไรเป็นหลัก?', options: ['เก็บข้อมูลชั่วคราวระหว่างทำงาน', 'เชื่อมต่ออินเทอร์เน็ต', 'แสดงผลบนจอ', 'จ่ายไฟให้เครื่อง'], answer: 0, explanation: 'RAM เป็นหน่วยความจำชั่วคราวที่ช่วยให้โปรแกรมทำงานได้รวดเร็ว' },
+        { question: 'SSD ใช้ทำอะไร?', options: ['ส่งข้อมูล', 'ประมวลผลภาพ', 'เก็บข้อมูลถาวร', 'แปลงเสียง'], answer: 2, explanation: 'SSD เก็บข้อมูลถาวรแม้ปิดเครื่อง' },
+        { question: 'ระบบปฏิบัติการคืออะไร?', options: ['เกมคอมพิวเตอร์', 'ซอฟต์แวร์จัดการฮาร์ดแวร์', 'สายไฟ', 'เว็บไซต์'], answer: 1, explanation: 'ระบบปฏิบัติการเป็นตัวกลางระหว่างผู้ใช้และฮาร์ดแวร์' },
+        { question: 'Chrome คืออะไร?', options: ['โปรแกรมทำเสียง', 'เว็บเบราว์เซอร์', 'เครื่องพิมพ์', 'ระบบไฟล์'], answer: 1, explanation: 'Chrome เป็นเว็บเบราว์เซอร์ที่ใช้เปิดเว็บไซต์' },
+        { question: 'URL ใช้สำหรับอะไร?', options: ['ระบุที่อยู่หน้าเว็บ', 'เก็บตัวอักษร', 'ตัดไฟ', 'ชาร์จแบต'], answer: 0, explanation: 'URL คือที่อยู่ของทรัพยากรบนอินเทอร์เน็ต' },
+        { question: 'Wi‑Fi ใช้เทคโนโลยีใด?', options: ['ไร้สาย', 'กล่องตู้', 'ตารางเวลา', 'สถานีรถไฟ'], answer: 0, explanation: 'Wi‑Fi ใช้สื่อสารผ่านคลื่นไร้สาย' },
+        { question: 'ไฟล์ .jpg มักเป็นประเภทใด?', options: ['ภาพ', 'เสียง', 'วีดีโอ', 'โปรแกรม'], answer: 0, explanation: 'ไฟล์ JPG/JPEG มักเป็นรูปภาพ' },
+        { question: 'ข้อใดเป็นคีย์ลัดคัดลอก?', options: ['Ctrl + C', 'Ctrl + V', 'Ctrl + A', 'Ctrl + S'], answer: 0, explanation: 'Ctrl + C ใช้คัดลอกข้อมูล' },
+        { question: 'ข้อใดเป็นคีย์ลัดวาง?', options: ['Ctrl + C', 'Ctrl + V', 'Ctrl + P', 'Ctrl + X'], answer: 1, explanation: 'Ctrl + V ใช้วางข้อมูลที่คัดลอกไว้' },
+        { question: 'GPU มักใช้กับงานใด?', options: ['ประมวลผลกราฟิก', 'ชาร์จแบต', 'เชื่อมต่อ USB', 'แปลง PDF'], answer: 0, explanation: 'GPU เหมาะกับการแสดงผลและประมวลผลกราฟิก' },
+        { question: 'Phishing คืออะไร?', options: ['การหลอกล่อข้อมูลสำคัญ', 'การลบไวรัส', 'การจัดเก็บไฟล์', 'การป้องกันพายุ'], answer: 0, explanation: 'Phishing เป็นการหลอกให้เหยื่อเปิดเผยข้อมูลสำคัญ' },
+        { question: 'ข้อใดปลอดภัยกว่า?', options: ['123456', 'password', 'รหัสผ่านยาวและซับซ้อน', 'วันเกิด'], answer: 2, explanation: 'รหัสผ่านที่ยาวและซับซ้อนปลอดภัยกว่า' },
+        { question: '2FA หมายถึงอะไร?', options: ['แบบยืนยันสองขั้นตอน', 'แบบใช้ไฟ 2A', 'โปรแกรมถ่ายรูป', 'การตั้งค่า Wi‑Fi'], answer: 0, explanation: '2FA เพิ่มรหัสอีกชั้นหนึ่งเพื่อยืนยันตัวตน' },
+        { question: 'Cloud Storage คืออะไร?', options: ['เก็บข้อมูลบนเซิร์ฟเวอร์ผ่านอินเทอร์เน็ต', 'ซอฟต์แวร์ทำความสะอาด', 'อุปกรณ์แปลงไฟ', 'เมนูอาหาร'], answer: 0, explanation: 'Cloud Storage คือการเก็บข้อมูลบนเครือข่ายอินเทอร์เน็ต' },
+        { question: 'IP Address ใช้สำหรับอะไร?', options: ['ระบุอุปกรณ์บนเครือข่าย', 'ให้ไฟฟ้า', 'แปลงภาษา', 'ทำให้จอสว่าง'], answer: 0, explanation: 'IP Address เป็นหมายเลขสำหรับระบุอุปกรณ์บนเครือข่าย' },
+        { question: 'ภาษาที่ใช้สร้างโครงสร้างหน้าเว็บคือ?', options: ['HTML', 'MP3', 'PNG', 'SQL'], answer: 0, explanation: 'HTML ใช้กำหนดโครงสร้างของหน้าเว็บ' },
+        { question: 'Git ใช้ทำอะไร?', options: ['จัดการเวอร์ชันของโค้ด', 'ปรับจอให้สว่าง', 'เพิ่มความเร็ว CPU', 'เพิ่ม RAM'], answer: 0, explanation: 'Git ใช้เก็บและติดตามการเปลี่ยนแปลงของโค้ด' },
+        { question: 'Backup มีประโยชน์อย่างไร?', options: ['กู้ข้อมูลเมื่อสูญหาย', 'ลดความร้อน CPU', 'เพิ่มความจุแบต', 'ปิดโปรแกรม'], answer: 0, explanation: 'Backup ช่วยกู้ข้อมูลได้เมื่อข้อมูลสูญหายหรือเสียหาย' },
+        { question: 'ข้อใดเป็นตัวอย่างของหมวดเครื่องมือความปลอดภัย?', options: ['Antivirus', 'Keyboard', 'Monitor', 'Speaker'], answer: 0, explanation: 'Antivirus ใช้ป้องกันไวรัสและภัยคุกคามทางคอมพิวเตอร์' }
+      ];
+
+      let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || JSON.stringify(defaultGame));
+      let started = false;
+      let screen = 'menu';
+      let showCheckIn = false;
+      let activeMinigame = null;
+      let mgTime = 20;
+      let mgScore = 0;
+      let mgObjects = [];
+      let quizIndex = 0;
+      let quizScore = 0;
+      let quizAnswered = null;
+      let quizFinished = false;
+
+      const clamp = (v, min = 0, max = 100) => Math.max(min, Math.min(max, v));
+      const getOutfit = (id) => OUTFITS.find((o) => o.id === id) || OUTFITS[0];
+      const saveGame = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+      function updateAchievements() {
+        if (state.money >= 1000) {
+          state.achievements = state.achievements.map((a) => a.id === 'rich_shark' ? { ...a, unlocked: true } : a);
+        }
+        if (state.unlockedOutfits.length >= 9) {
+          state.achievements = state.achievements.map((a) => a.id === 'fashion_ista' ? { ...a, unlocked: true } : a);
+        }
+        if (state.level >= 5) {
+          state.achievements = state.achievements.map((a) => a.id === 'level_5' ? { ...a, unlocked: true } : a);
+        }
+      }
+
+      function renderStart() {
+        document.getElementById('app').innerHTML = `
+          <div class="starter">
+            <div class="starter-inner">
+              <div class="starter-header"><span>PLAYER 01</span><span>🪙 800</span></div>
+              <div class="starter-body">
+                <div class="starter-pet">🦈</div>
+                <div class="starter-badge">CORAL ARCADE</div>
+                <h1>Chibi Shark<br>World</h1>
+                <p>บลูชาร์กกำลังรอครีบเพื่อนใหม่—ดูแลให้สุข เติบโตให้ไกล แล้วเก็บสมบัติให้เต็มตู้</p>
+                <div class="starter-grid">
+                  <div class="small"><strong>50</strong>ชุดแฟชั่น</div>
+                  <div class="small"><strong>5</strong>มินิเกม</div>
+                  <div class="small"><strong>10</strong>บ้าน</div>
+                </div>
+                <button class="starter-btn" data-action="start-game">ปลุกบลูชาร์ก รับ 800 เหรียญ →</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function render() {
+        updateAchievements();
+        saveGame();
+
+        if (!started) {
+          renderStart();
+          return;
+        }
+
+        const outfit = getOutfit(state.outfit);
+        const achievementCount = state.achievements.filter((a) => a.unlocked).length;
+        const screenHtml = {
+          menu: `
+            <div class="screen">
+              <div class="pet-hero card">
+                <div class="pet-circle">${state.pet}<span class="outfit-tag">${outfit.icon}</span></div>
+                <div class="pet-name">${state.petName}</div>
+                <div class="pet-state">พร้อมออกผจญภัย · ชุด${outfit.name}</div>
+              </div>
+              <div class="menu-grid">
+                <button class="menu-btn" data-screen="select" style="background:#e8f7ff; border-color:#b4e0f6; color:#0b609e;"><span class="emoji">🦈</span><span class="label">เลือกฉลาม</span></button>
+                <button class="menu-btn" data-screen="home" style="background:#eafbf4; border-color:#b7e9d3; color:#187d57;"><span class="emoji">🏡</span><span class="label">อัปเกรดบ้าน</span></button>
+                <button class="menu-btn" data-screen="care" style="background:#fff4dd; border-color:#f6d9a5; color:#9e5d00;"><span class="emoji">💙</span><span class="label">ดูแล & อาหาร</span></button>
+                <button class="menu-btn" data-screen="dressup" style="background:#fff0f4; border-color:#f3c8d8; color:#a82f5d;"><span class="emoji">👗</span><span class="label">แฟชั่น</span></button>
+                <button class="menu-btn" data-screen="minigames" style="background:#f2ecff; border-color:#d8c9ff; color:#5846a1;"><span class="emoji">🎮</span><span class="label">มินิเกม</span></button>
+                <button class="menu-btn" data-screen="shop" style="background:#fff1eb; border-color:#f5cfb0; color:#a5621a;"><span class="emoji">🛒</span><span class="label">ร้านค้า</span></button>
+              </div>
+              <button class="achievements-link" data-screen="achievements"><span>🏆 ตู้ความสำเร็จ</span><span>${achievementCount}/${state.achievements.length}</span></button>
+            </div>
+          `,
+          select: `
+            <div class="screen">
+              <div class="section-head"><h2>🦈 เลือกฉลาม</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="menu-grid">
+                ${[
+                  { emoji: '🦈', name: 'บลูชาร์ก', reqLevel: 1 },
+                  { emoji: '🐋', name: 'เวลชาร์ก', reqLevel: 1 },
+                  { emoji: '🦈', name: 'มาโกชาร์ก', reqLevel: 1 },
+                  { emoji: '🦈', name: 'เนอร์สชาร์ก', reqLevel: 1 },
+                  { emoji: '🦈', name: 'เทรชเชอร์', reqLevel: 3 },
+                  { emoji: '🦈', name: 'แบล็กทิป', reqLevel: 5 },
+                  { emoji: '🦈', name: 'เกรตไวต์ชิบิ', reqLevel: 8 },
+                  { emoji: '👑', name: 'ราชาฉลาม', reqLevel: 10 }
+                ].map((pet) => {
+                  const unlocked = state.level >= pet.reqLevel;
+                  const selected = state.petName === pet.name;
+                  return `<button class="menu-btn" data-action="select-pet" data-pet-name="${pet.name}" data-pet-emoji="${pet.emoji}" style="border-color:${selected ? '#7ac2ea' : '#dfeaf4'}; background:${selected ? '#eaf8ff' : 'white'}; opacity:${unlocked ? 1 : 0.55}; cursor:${unlocked ? 'pointer' : 'not-allowed'};"><span class="emoji">${pet.emoji}</span><span class="label">${pet.name}</span><small style="display:block; margin-top:6px; font-size:0.62rem; font-weight:800; color:${unlocked ? '#0d609d' : '#a85460'};">${unlocked ? (selected ? 'กำลังใช้งาน' : 'เลือกได้') : 'Lv.' + pet.reqLevel}</small></button>`;
+                }).join('')}
+              </div>
+            </div>
+          `,
+          home: `
+            <div class="screen">
+              <div class="section-head"><h2>🏡 อัปเกรดบ้าน</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="shop-list">
+                ${[
+                  { level: 1, name: 'บ้านเริ่มต้น', icon: '🏠', cost: 0, desc: 'ที่พักพิงอบอุ่นสำหรับเริ่มต้น' },
+                  { level: 2, name: 'ห้องนอน', icon: '🛏️', cost: 200, desc: 'เพิ่มเตียงนอน' },
+                  { level: 3, name: 'ห้องตกแต่ง', icon: '🪸', cost: 500, desc: 'ประดับด้วยปะการัง' },
+                  { level: 4, name: 'ห้องเล่น', icon: '🎮', cost: 1000, desc: 'มุมสันทนาการ' },
+                  { level: 5, name: 'บ้านใหญ่', icon: '🏰', cost: 2000, desc: 'วังปะการัง' },
+                  { level: 6, name: 'สระน้ำส่วนตัว', icon: '🌊', cost: 3500, desc: 'สระว่ายน้ำส่วนตัว' },
+                  { level: 7, name: 'ห้องเพื่อนปลา', icon: '🐠', cost: 5000, desc: 'พื้นที่เพื่อนปลา' },
+                  { level: 8, name: 'ห้องสมบัติ', icon: '💎', cost: 7000, desc: 'คลังสมบัติ' },
+                  { level: 9, name: 'หอคอยกระแสน้ำ', icon: '🗼', cost: 8500, desc: 'มองเห็นได้รอบด้าน' },
+                  { level: 10, name: 'คฤหาสน์ใต้ทะเล', icon: '👑', cost: 10000, desc: 'พระราชวังท้องทะเล' }
+                ].map((house) => {
+                  const isCurrent = state.house === house.level;
+                  const isNext = house.level === state.house + 1;
+                  const allowed = isNext && state.level >= house.level && state.money >= house.cost;
+                  return `
+                    <div class="shop-item" style="background:${isCurrent ? '#ecfbf3' : isNext ? '#fff' : '#f5f7fa'}; border-color:${isCurrent ? '#7dd3a4' : isNext ? '#b4dff6' : '#dfeaf4'};">
+                      <div class="shop-icon">${house.icon}</div>
+                      <div class="details"><h4>Lv.${house.level} ${house.name}</h4><p>${house.desc}</p></div>
+                      ${isCurrent ? '<span style="font-weight:900; color:#167d4d; font-size:0.64rem;">ใช้งานอยู่</span>' : `<button class="primary-btn" data-action="upgrade-house" data-level="${house.level}" data-cost="${house.cost}" ${!isNext ? 'disabled' : ''} style="opacity:${isNext ? 1 : 0.5};">${isNext ? 'อัปเกรด' : 'ล็อก'}</button>`}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `,
+          care: `
+            <div class="screen">
+              <div class="section-head"><h2>💙 ดูแลและให้อาหาร</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="status-box">
+                <div class="status-row"><div class="status-meta"><span>🐟 ความอิ่ม</span><span>${Math.floor(state.hunger)}%</span></div><div class="status-track"><span style="width:${state.hunger}%; background:linear-gradient(90deg,#f7b36b,#f39d41);"></span></div></div>
+                <div class="status-row"><div class="status-meta"><span>💗 ความสุข</span><span>${Math.floor(state.happiness)}%</span></div><div class="status-track"><span style="width:${state.happiness}%; background:linear-gradient(90deg,#f9a3c0,#eb5d89);"></span></div></div>
+                <div class="status-row"><div class="status-meta"><span>⚡ พลังงาน</span><span>${Math.floor(state.energy)}%</span></div><div class="status-track"><span style="width:${state.energy}%; background:linear-gradient(90deg,#67d4ff,#1b9fe2);"></span></div></div>
+                <div class="status-row"><div class="status-meta"><span>🫧 ความสะอาด</span><span>${Math.floor(state.clean)}%</span></div><div class="status-track"><span style="width:${state.clean}%; background:linear-gradient(90deg,#67e0a8,#1ca86b);"></span></div></div>
+              </div>
+              <div class="food-grid">
+                <button class="food-item" data-action="feed" data-name="ปลาเล็ก" data-cost="10" data-hunger="20" data-happy="0"><span class="emoji">🐟</span><span class="name">ปลาตัวเล็ก</span><span class="meta">10 เหรียญ · อิ่ม +20</span></button>
+                <button class="food-item" data-action="feed" data-name="ปลาหลากสี" data-cost="25" data-hunger="35" data-happy="0"><span class="emoji">🐠</span><span class="name">ปลาหลากสี</span><span class="meta">25 เหรียญ · อิ่ม +35</span></button>
+                <button class="food-item" data-action="feed" data-name="กุ้ง" data-cost="40" data-hunger="50" data-happy="0"><span class="emoji">🦐</span><span class="name">กุ้ง</span><span class="meta">40 เหรียญ · อิ่ม +50</span></button>
+                <button class="food-item" data-action="feed" data-name="ปู" data-cost="60" data-hunger="60" data-happy="10"><span class="emoji">🦀</span><span class="name">ปู</span><span class="meta">60 เหรียญ · อิ่ม +60 · สุข +10</span></button>
+                <button class="food-item" data-action="feed" data-name="ปลาหมึก" data-cost="100" data-hunger="80" data-happy="20"><span class="emoji">🐙</span><span class="name">ปลาหมึก</span><span class="meta">100 เหรียญ · อิ่ม +80 · สุข +20</span></button>
+                <button class="food-item" data-action="feed" data-name="ปลาทองพิเศษ" data-cost="250" data-hunger="100" data-happy="30"><span class="emoji">👑</span><span class="name">ปลาทองพิเศษ</span><span class="meta">250 เหรียญ · ทุกค่าเต็ม</span></button>
+              </div>
+              <div class="care-actions">
+                <button class="care-btn" data-action="play" style="background:#e2f5ff; color:#12659f;">✨ เล่นน้ำ</button>
+                <button class="care-btn" data-action="bath" style="background:#e8fbf3; color:#11714e;">🛁 อาบน้ำ</button>
+                <button class="care-btn" data-action="sleep" style="background:#eeeeff; color:#51449b;">🌙 นอนหลับ</button>
+              </div>
+            </div>
+          `,
+          dressup: `
+            <div class="screen">
+              <div class="section-head"><h2>👗 แฟชั่น</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="card" style="padding:16px; margin-bottom:12px; background:linear-gradient(180deg,#1b83d0,#1579c9); color:white; text-align:center; position:relative; overflow:hidden;">
+                <div style="display:inline-flex; width:110px; height:110px; border-radius:50%; background:rgba(255,255,255,0.85); place-items:center; font-size:4rem; border:4px solid white; position:relative;">${state.pet}<span style="position:absolute; right:-8px; bottom:6px; background:#fff4d5; border:2px solid white; width:32px; height:32px; border-radius:50%; display:grid; place-items:center;">${outfit.icon}</span></div>
+                <div style="margin-top:10px; font-weight:900;">กำลังสวม: ${outfit.name}</div>
+              </div>
+              <div class="dress-grid">
+                ${OUTFITS.map((item) => {
+                  const unlocked = state.unlockedOutfits.includes(item.id);
+                  const active = state.outfit === item.id;
+                  return `<button class="dress-item" data-action="equip-outfit" data-outfit-id="${item.id}" data-price="${item.price}" style="background:${active ? '#edf9ff' : 'white'}; border-color:${active ? '#7ec2f3' : '#dfeaf4'};"><span class="emoji">${item.icon}</span><span class="name">${item.name}</span><span class="meta">${active ? 'สวมอยู่' : unlocked ? 'เลือกสวม' : `${item.price} เหรียญ`}</span></button>`;
+                }).join('')}
+              </div>
+            </div>
+          `,
+          minigames: `
+            <div class="screen">
+              <div class="section-head"><h2>🎮 มินิเกม</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <p style="margin:0 0 12px; color:#607889; font-size:0.72rem; line-height:1.6;">แตะของสะสมภายใน 20 วินาทีเพื่อรับเหรียญและ XP ทุกเกมใช้รางวัลพื้นฐานเดียวกัน</p>
+              <div class="mini-grid">
+                ${[
+                  { type: 'fish', emoji: '🐟', name: 'จับปลาทองมหาสมุทร' },
+                  { type: 'bubbles', emoji: '🫧', name: 'เป่าฟองสบู่มหาสนุก' },
+                  { type: 'pearls', emoji: '🐚', name: 'เก็บหอยมุกเวทมนตร์' },
+                  { type: 'cards', emoji: '🐬', name: 'ตามหาฝูงโลมาซิ่ง' },
+                  { type: 'crab', emoji: '🦀', name: 'เก็บสมบัติราชาปู' }
+                ].map((item, index) => `<button class="mini-btn" data-action="start-minigame" data-type="${item.type}"><span class="emoji">${item.emoji}</span><span>${index + 1}. ${item.name}</span></button>`).join('')}
+              </div>
+              <button class="primary-full" data-action="open-quiz">💻 ควิซความรู้คอมพิวเตอร์ 20 ข้อ</button>
+            </div>
+          `,
+          shop: `
+            <div class="screen">
+              <div class="section-head"><h2>🛒 ร้านค้าไอเทม</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="shop-list">
+                <div class="shop-item"><div class="shop-icon">⚡</div><div class="details"><h4>เครื่องดื่มพลังงาน</h4><p>พลังงาน +45 · มี ${state.inventory.energy_drink}</p></div><div class="shop-actions"><button class="small-btn" data-action="use-item" data-item="energy_drink">ใช้</button><button class="primary-btn" data-action="buy-item" data-item="energy_drink" data-price="50">50 เหรียญ</button></div></div>
+                <div class="shop-item"><div class="shop-icon">❤️</div><div class="details"><h4>ยารักษา</h4><p>ฟื้นทุกสถานะเต็ม · มี ${state.inventory.healing_potion}</p></div><div class="shop-actions"><button class="small-btn" data-action="use-item" data-item="healing_potion">ใช้</button><button class="primary-btn" data-action="buy-item" data-item="healing_potion" data-price="120">120 เหรียญ</button></div></div>
+                <div class="shop-item"><div class="shop-icon">🫧</div><div class="details"><h4>สเปรย์ทำความสะอาด</h4><p>ความสะอาดเต็ม · มี ${state.inventory.cleaning_spray}</p></div><div class="shop-actions"><button class="small-btn" data-action="use-item" data-item="cleaning_spray">ใช้</button><button class="primary-btn" data-action="buy-item" data-item="cleaning_spray" data-price="40">40 เหรียญ</button></div></div>
+                <div class="shop-item"><div class="shop-icon">🍀</div><div class="details"><h4>เครื่องรางโชคดี</h4><p>รางวัลมินิเกม x2 · ใช้งานอยู่ ${state.luckMultiplier}x</p></div><div class="shop-actions"><button class="primary-btn" data-action="buy-lucky" data-price="200" ${state.luckMultiplier >= 2 ? 'disabled' : ''}>${state.luckMultiplier >= 2 ? 'ใช้งานแล้ว' : '200 เหรียญ'}</button></div></div>
+              </div>
+            </div>
+          `,
+          achievements: `
+            <div class="screen">
+              <div class="section-head"><h2>🏆 ตู้ความสำเร็จ</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              <div class="achievement-list">
+                ${state.achievements.map((item) => `<div class="achievement-item" style="background:${item.unlocked ? '#fffbed' : '#f7f8fa'}; border-color:${item.unlocked ? '#f3d690' : '#dfeaf4'};"><h4>${item.unlocked ? '🏆' : '🔒'} ${item.title}</h4><p>${item.desc}</p></div>`).join('')}
+              </div>
+            </div>
+          `,
+          computerQuiz: `
+            <div class="screen">
+              <div class="section-head"><h2>💻 ควิซความรู้คอมพิวเตอร์</h2><button class="back-btn" data-screen="menu">← กลับ</button></div>
+              ${quizFinished ? `
+                <div class="result-box">
+                  <div class="trophy">🏆</div>
+                  <h3>จบควิซแล้ว!</h3>
+                  <p>ตอบถูก ${quizScore} / ${COMPUTER_QUIZ.length} ข้อ</p>
+                  <p>รับรางวัล ${quizScore * 10} เหรียญ</p>
+                  <button class="primary-full" data-action="open-quiz">เล่นใหม่</button>
+                </div>
+              ` : `
+                <div class="quiz-card">
+                  <div class="quiz-top"><span>ข้อ ${quizIndex + 1} / ${COMPUTER_QUIZ.length}</span><span>⭐ ${quizScore} ถูก</span></div>
+                  <div class="progress"><span style="width:${((quizIndex + 1) / COMPUTER_QUIZ.length) * 100}%"></span></div>
+                  <div class="quiz-box">
+                    <div style="font-size:3rem; text-align:center; margin-bottom:8px;">🧠</div>
+                    <h3>${COMPUTER_QUIZ[quizIndex].question}</h3>
+                    <div class="answer-list">
+                      ${COMPUTER_QUIZ[quizIndex].options.map((option, index) => {
+                        const selected = quizAnswered === index;
+                        const correct = COMPUTER_QUIZ[quizIndex].answer === index;
+                        const revealed = quizAnswered !== null;
+                        const className = revealed && correct ? 'correct' : revealed && selected ? 'wrong' : '';
+                        return `<button class="answer-btn ${className}" data-action="choose-answer" data-index="${index}" ${revealed ? 'disabled' : ''}>${String.fromCharCode(65 + index)}. ${option}</button>`;
+                      }).join('')}
+                    </div>
+                    ${quizAnswered !== null ? `<div class="explanation"><strong>${quizAnswered === COMPUTER_QUIZ[quizIndex].answer ? '✅ ถูกต้อง!' : '💡 ความรู้:'}</strong> ${COMPUTER_QUIZ[quizIndex].explanation}</div>` : ''}
+                    ${quizAnswered !== null ? `<button class="primary-full" data-action="next-question">${quizIndex === COMPUTER_QUIZ.length - 1 ? 'ดูผลคะแนน 🏆' : 'ข้อต่อไป →'}</button>` : ''}
+                  </div>
+                </div>
+              `}
+            </div>
+          `
+        };
+
+        const minigameHtml = activeMinigame ? `
+          <div class="screen">
+            <div class="section-head"><h2>🎮 ${activeMinigame}</h2><button class="back-btn" data-action="exit-minigame">ออก</button></div>
+            <div class="card" style="padding:12px; background:#eaf8ff;">
+              <div style="display:flex; justify-content:space-between; font-size:0.7rem; font-weight:900; margin-bottom:12px;"><span>⏱️ ${mgTime} วินาที</span><span>🪙 ${mgScore} คะแนน</span></div>
+              <div style="position:relative; height:260px; border-radius:20px; background:linear-gradient(180deg,#2bb0ff,#0f5e9f); overflow:hidden;">
+                ${mgObjects.map((item) => `<button data-action="collect-object" data-id="${item.id}" style="position:absolute; left:${item.x}%; top:${item.y}%; font-size:2rem; border:none; background:transparent; cursor:pointer;">${item.type}</button>`).join('')}
+              </div>
+            </div>
+          </div>
+        ` : screenHtml[screen];
+
+        document.getElementById('app').innerHTML = `
+          <div class="app">
+            <header class="header">
+              <div class="header-top">
+                <div class="brand">
+                  <div class="logo">🦈</div>
+                  <div>
+                    <div class="brand-name">Chibi Shark</div>
+                    <div class="brand-sub">CORAL ARCADE</div>
+                  </div>
+                </div>
+                <div class="topbar">
+                  <div class="chip gold" data-action="open-checkin">🎁 เช็คอิน</div>
+                  <div class="chip">🪙 ${state.money.toLocaleString('th-TH')}</div>
+                </div>
+              </div>
+              <div class="xp-bar">
+                <div class="xp-meta"><span>⭐ Lv.${state.level}</span><span>${state.xp}/100 XP</span></div>
+                <div class="bar"><span style="width:${state.xp}%"></span></div>
+              </div>
+            </header>
+            <main class="content">${minigameHtml}</main>
+            <nav class="bottom-nav">
+              <button class="nav-btn ${screen === 'menu' ? 'active' : ''}" data-screen="menu"><span>🏠</span>เมนู</button>
+              <button class="nav-btn ${screen === 'care' ? 'active' : ''}" data-screen="care"><span>💙</span>ดูแล</button>
+              <button class="nav-btn ${screen === 'dressup' ? 'active' : ''}" data-screen="dressup"><span>👗</span>แฟชั่น</button>
+              <button class="nav-btn ${screen === 'shop' ? 'active' : ''}" data-screen="shop"><span>🛒</span>ร้านค้า</button>
+            </nav>
+          </div>
+        `;
+
+        if (showCheckIn) {
+          const modal = document.createElement('div');
+          modal.style.position = 'fixed';
+          modal.style.inset = '0';
+          modal.style.background = 'rgba(4,30,53,0.55)';
+          modal.style.display = 'grid';
+          modal.style.placeItems = 'center';
+          modal.style.padding = '18px';
+          modal.innerHTML = `
+            <div style="max-width:360px; width:100%; background:white; border:4px solid #ffd46f; border-radius:24px; padding:24px; text-align:center; box-shadow:0 20px 40px rgba(0,0,0,0.18);">
+              <div style="width:72px; height:72px; margin:0 auto; border-radius:18px; background:#fff2c4; display:grid; place-items:center; font-size:2.5rem;">🎁</div>
+              <h3 style="margin:14px 0 0; color:#0d5d92; font-size:1.8rem;">เช็คอินประจำวัน</h3>
+              <p style="margin:10px 0 0; font-size:0.9rem; color:#576d7f;">วันนี้รับ ${150 + state.dailyStreak * 25} เหรียญ</p>
+              <div style="display:flex; gap:8px; margin-top:18px;">
+                <button class="primary-full" data-action="claim-checkin" style="margin-top:0; flex:1;">รับรางวัล</button>
+                <button class="small-btn" data-action="close-checkin" style="margin-top:0;">ปิด</button>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(modal);
+        }
+      }
+
+      function startMiniGame(type) {
+        activeMinigame = type;
+        mgTime = 20;
+        mgScore = 0;
+        mgObjects = [];
+        render();
+
+        const timer = setInterval(() => {
+          if (!activeMinigame) return clearInterval(timer);
+          mgTime -= 1;
+          if (mgTime <= 0) {
+            clearInterval(timer);
+            const reward = Math.round(mgScore * 12 * state.luckMultiplier);
+            if (mgScore > 0) state.money += reward;
+            activeMinigame = null;
+            render();
+            return;
+          }
+          render();
+        }, 1000);
+
+        const spawner = setInterval(() => {
+          if (!activeMinigame) return clearInterval(spawner);
+          const pool = ['🐟', '🐠', '⭐', '🫧', '💧', '💎', '🐚', '✨', '👑', '🐬', '🦀', '🦐', '🐙'];
+          const random = pool[Math.floor(Math.random() * pool.length)];
+          mgObjects.push({ id: `${Date.now()}-${Math.random()}`, x: 10 + Math.random() * 72, y: 18 + Math.random() * 54, type: random });
+          if (mgObjects.length > 8) mgObjects.shift();
+          render();
+        }, 700);
+      }
+
+      document.addEventListener('click', (event) => {
+        const action = event.target.closest('[data-action]');
+        const screenBtn = event.target.closest('[data-screen]');
+
+        if (screenBtn) {
+          const next = screenBtn.dataset.screen;
+          screen = next;
+          render();
+          return;
+        }
+
+        if (!action) return;
+
+        const { action: name } = action.dataset;
+
+        switch (name) {
+          case 'start-game':
+            started = true;
+            render();
+            break;
+          case 'open-checkin':
+            showCheckIn = true;
+            render();
+            break;
+          case 'close-checkin':
+            showCheckIn = false;
+            render();
+            break;
+          case 'claim-checkin':
+            {
+              const reward = 150 + state.dailyStreak * 25;
+              state.money += reward;
+              state.dailyStreak += 1;
+              state.lastCheckIn = new Date().toISOString().slice(0, 10);
+              showCheckIn = false;
+              render();
+            }
+            break;
+          case 'feed': {
+            const cost = Number(action.dataset.cost);
+            const hunger = Number(action.dataset.hunger || 0);
+            const happy = Number(action.dataset.happy || 0);
+            if (state.money < cost) { alert(`เงินไม่พอ ต้องการ ${cost} เหรียญ`); return; }
+            state.money -= cost;
+            state.hunger = clamp(state.hunger + hunger);
+            state.happiness = clamp(state.happiness + happy);
+            state.xp = Math.min(100, state.xp + 10);
+            if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            if (action.dataset.name === 'ปลาเล็ก') {
+              state.achievements = state.achievements.map((a) => a.id === 'first_feed' ? { ...a, unlocked: true } : a);
+            }
+            render();
+            break;
+          }
+          case 'play':
+            if (state.energy < 15) { alert('น้องเหนื่อยเกินไป ต้องนอนพักก่อน'); return; }
+            state.happiness = clamp(state.happiness + 35);
+            state.energy = clamp(state.energy - 15);
+            state.xp = Math.min(100, state.xp + 15);
+            if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            render();
+            break;
+          case 'bath':
+            state.clean = 100;
+            state.xp = Math.min(100, state.xp + 10);
+            if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            render();
+            break;
+          case 'sleep':
+            state.energy = 100;
+            state.xp = Math.min(100, state.xp + 20);
+            if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            render();
+            break;
+          case 'upgrade-house': {
+            const target = Number(action.dataset.level);
+            const cost = Number(action.dataset.cost);
+            if (state.money < cost) { alert(`เงินไม่พอ ต้องการ ${cost} เหรียญ`); return; }
+            state.money -= cost;
+            state.house = target;
+            state.xp = Math.min(100, state.xp + 60);
+            if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            render();
+            break;
+          }
+          case 'select-pet':
+            state.pet = action.dataset.petEmoji;
+            state.petName = action.dataset.petName;
+            render();
+            break;
+          case 'equip-outfit': {
+            const outfitId = action.dataset.outfitId;
+            const price = Number(action.dataset.price);
+            const unlocked = state.unlockedOutfits.includes(outfitId);
+            if (unlocked) { state.outfit = outfitId; render(); return; }
+            if (state.money < price) { alert(`เงินไม่พอ ต้องการ ${price} เหรียญ`); return; }
+            state.money -= price;
+            state.outfit = outfitId;
+            state.unlockedOutfits.push(outfitId);
+            render();
+            break;
+          }
+          case 'buy-item': {
+            const item = action.dataset.item;
+            const price = Number(action.dataset.price);
+            if (state.money < price) { alert(`เงินไม่พอ ต้องการ ${price} เหรียญ`); return; }
+            state.money -= price;
+            state.inventory[item] = (state.inventory[item] || 0) + 1;
+            render();
+            break;
+          }
+          case 'use-item': {
+            const item = action.dataset.item;
+            if ((state.inventory[item] || 0) <= 0) { alert('ไม่มีไอเทมชิ้นนี้ในคลัง'); return; }
+            state.inventory[item] -= 1;
+            if (item === 'energy_drink') state.energy = clamp(state.energy + 45);
+            else if (item === 'healing_potion') { state.hunger = 100; state.happiness = 100; state.energy = 100; state.clean = 100; }
+            else { state.clean = 100; }
+            render();
+            break;
+          }
+          case 'buy-lucky':
+            if (state.luckMultiplier >= 2) { alert('เครื่องรางโชคดีทำงานอยู่แล้ว'); return; }
+            if (state.money < 200) { alert('เงินไม่พอ ต้องการ 200 เหรียญ'); return; }
+            state.money -= 200;
+            state.luckMultiplier = 2;
+            render();
+            break;
+          case 'open-quiz':
+            quizIndex = 0; quizScore = 0; quizAnswered = null; quizFinished = false; screen = 'computerQuiz'; render();
+            break;
+          case 'choose-answer': {
+            const idx = Number(action.dataset.index);
+            if (quizAnswered !== null) return;
+            quizAnswered = idx;
+            const current = COMPUTER_QUIZ[quizIndex];
+            if (idx === current.answer) {
+              quizScore += 1;
+              state.xp = Math.min(100, state.xp + 10);
+              if (state.xp >= 100) { state.level += 1; state.xp = 0; }
+            }
+            render();
+            break;
+          }
+          case 'next-question':
+            if (quizAnswered === null) return;
+            if (quizIndex >= COMPUTER_QUIZ.length - 1) {
+              quizFinished = true;
+              state.money += quizScore * 10;
+              render();
+              return;
+            }
+            quizIndex += 1;
+            quizAnswered = null;
+            render();
+            break;
+          case 'start-minigame':
+            startMiniGame(action.dataset.type);
+            break;
+          case 'exit-minigame':
+            activeMinigame = null;
+            render();
+            break;
+          case 'collect-object': {
+            const id = action.dataset.id;
+            mgObjects = mgObjects.filter((obj) => obj.id !== id);
+            mgScore += 1;
+            render();
+            break;
+          }
+          default:
+            break;
+        }
+      });
+
+      render();
+    </script>
+  </body>
+</html>
